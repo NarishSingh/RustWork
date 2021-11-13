@@ -6,10 +6,9 @@ fn main() {
     let rand = rand::thread_rng().gen_range(1..101); //rand between 1-100
 
     println!("---Guess the number!---");
-
     //gameplay loop
     loop {
-        let mut guess = String::new();
+        let mut guess: String = String::new();
 
         //read input
         println!("Please input your guess: ");

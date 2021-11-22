@@ -1,7 +1,4 @@
-use core::num::dec2flt::parse;
-use core::panicking::panic;
 use std::io;
-use std::cmp::Ordering;
 use std::fmt::{Display, Formatter};
 use rand::Rng;
 
@@ -24,7 +21,7 @@ fn main() {
         io::stdin()
             .read_line(&mut player_play)
             .expect("Failed to read line");
-        player_move = match player_play.trim().as_str() {
+        player_move = match player_play.trim() {
             "1" | "R" => Moves::Rock,
             "2" | "P" => Moves::Paper,
             "3" | "S" => Moves::Scissors,
@@ -37,8 +34,16 @@ fn main() {
         println!("You chose {}", player_move);
 
         comp_move = get_comp_move();
+        println!("Comp chose {}", comp_move);
 
         //round outcome
+        if (player_move as i32 + 1) % 3 == comp_move as i32 {
+            println!("~Comp Wins!~");
+        } else if matches!(player_move, comp_move) { //todo use of moved var here...
+            println!("~DRAW~");
+        } else {
+            println!("~Player Wins!~");
+        }
 
         //New round
         let mut play_again: String = String::new();
@@ -62,7 +67,7 @@ fn get_comp_move() -> Moves {
         1 => Moves::Rock,
         2 => Moves::Paper,
         3 => Moves::Scissors,
-        _ => { panic("RNG Error") }
+        _ => { panic!("RNG Error") }
     }
 }
 

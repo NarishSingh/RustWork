@@ -5,23 +5,24 @@ use rand::Rng;
 fn main() {
     let mut playing: bool = true;
     let mut round_ct: i32 = 1;
-    let mut player_play: String = String::new();
-    let mut player_move: Moves;
     let mut comp_move: Moves;
+    let mut player_win: i32 = 0;
+    let mut comp_win: i32 = 0;
 
     println!("---RPS---");
     while playing {
         println!("-Round {}-", round_ct);
 
         //moves
+        let mut player_move: String = String::new(); //will shadow later
         println!("Enter move:");
         println!("1/R - Rock");
         println!("2/P - Paper");
         println!("3/S - Scissors");
         io::stdin()
-            .read_line(&mut player_play)
+            .read_line(&mut player_move)
             .expect("Failed to read line");
-        player_move = match player_play.trim() {
+        let player_move: Moves = match player_move.trim() {
             "1" | "R" => Moves::Rock,
             "2" | "P" => Moves::Paper,
             "3" | "S" => Moves::Scissors,
@@ -37,37 +38,47 @@ fn main() {
         println!("Comp chose {}", comp_move);
 
         //round outcome
-        if (player_move as i32 + 1) % 3 == comp_move as i32 {
+        //enums are 0 based, can cast to i32 for comparison
+        let p_move_i: i32 = player_move as i32;
+        let c_move_i: i32 = comp_move as i32;
+        if (p_move_i + 1) % 3 == c_move_i {
             println!("~Comp Wins!~");
-        } else if matches!(player_move, comp_move) { //todo use of moved var here...
+            comp_win += 1;
+        } else if p_move_i == c_move_i {
             println!("~DRAW~");
         } else {
             println!("~Player Wins!~");
+            player_win += 1;
         }
 
         //New round
         let mut play_again: String = String::new();
-        print!("New round? (y/n): ");
+        println!("\nNew round? (y/n): ");
         io::stdin()
             .read_line(&mut play_again)
             .expect("Failed to read line");
-        playing = if play_again == "y" { true } else { false };
+        playing = if play_again.trim().eq("y") { true } else { false };
+
         if playing {
             round_ct += 1;
         }
     }
+
+    println!("\n-End Game-");
+    println!("Player = {}", player_win);
+    println!("Comp = {}", comp_win);
+    println!("\n{}", if player_win > comp_win { "***Player wins the game!***" } else { "***Comp wins the game!***" });
 }
 
 /// Get comp move
 ///
 /// Return a random variant of the Moves enum
 fn get_comp_move() -> Moves {
-    let rand: i32 = rand::thread_rng().gen_range(1..4);
-    match rand {
+    match rand::thread_rng().gen_range(1..4) {
         1 => Moves::Rock,
         2 => Moves::Paper,
         3 => Moves::Scissors,
-        _ => { panic!("RNG Error") }
+        _ => { panic!("RNG threading Error") }
     }
 }
 

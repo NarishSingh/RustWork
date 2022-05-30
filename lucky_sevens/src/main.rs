@@ -17,7 +17,6 @@ fn main() {
     let mut lucky_ct: i32 = 0;
     let mut peak_roll: i32 = 0;
     let mut peak_pot: Decimal = dec!(0.00);
-    let mut fail_exit: bool = false;
 
     //get buy in amount
     print!("Enter buy in: $");
@@ -43,8 +42,8 @@ fn main() {
 
     //exit game if can't play with amounts provided
     if pot <= BROKE || bet <= BROKE {
-        fail_exit = true;
-        println!("Unplayable amount")
+        println!("Unplayable amount. Please remain seated, a securitron will be with you shortly to escort back to the Mojave");
+        std::process::exit(0)
     }
 
     //play sim
@@ -73,19 +72,17 @@ fn main() {
         roll_ct += 1;
     }
 
-    if !fail_exit {
-        println!("You went broke after {roll_ct} rolls...");
-        println!("You got lucky {lucky_ct} times tonight...");
-        println!("Highest earning: Round {peak_roll} -> ${peak_pot:.2}");
+    println!("You went broke after {roll_ct} rolls...");
+    println!("You got lucky {lucky_ct} times tonight...");
+    println!("Highest earning: Round {peak_roll} -> ${peak_pot:.2}");
 
-        if pot < BROKE {
-            let owed: Decimal = pot.abs();
-            println!("You owe the house {owed:.2}");
-        }
+    if pot < BROKE {
+        let owed: Decimal = pot.abs();
+        println!("You owe the house {owed:.2}");
     }
 }
 
-/// Rolls 2 6-sided dice
+/// Rolls two 6-sided dice
 ///
 /// Returns: a random i32 between 1-12
 fn roll() -> i32 {

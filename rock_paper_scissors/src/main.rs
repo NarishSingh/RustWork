@@ -1,6 +1,7 @@
+mod Moves;
+
 use std::io;
-use std::fmt::{Display, Formatter};
-use rand::Rng;
+use crate::Moves::Moves::Moves;
 
 fn main() {
     let mut playing: bool = true;
@@ -23,9 +24,9 @@ fn main() {
             .read_line(&mut player_move)
             .expect("Failed to read line");
         let player_move: Moves = match player_move.trim() {
-            "1" | "R" => Moves::Rock,
-            "2" | "P" => Moves::Paper,
-            "3" | "S" => Moves::Scissors,
+            "1" | "R" | "r" => Moves::Rock,
+            "2" | "P" | "p" => Moves::Paper,
+            "3" | "S" | "s" => Moves::Scissors,
             _ => {
                 println!("Invalid input");
                 println!("-Terminating Round-");
@@ -39,12 +40,12 @@ fn main() {
 
         //round outcome
         //enums are 0 based, can cast to i32 for comparison
-        let p_move_i: i32 = player_move as i32;
-        let c_move_i: i32 = comp_move as i32;
-        if (p_move_i + 1) % 3 == c_move_i {
+        let p_move_int: i32 = player_move as i32;
+        let c_move_int: i32 = comp_move as i32;
+        if (p_move_int + 1) % 3 == c_move_int {
             println!("~Comp Wins!~");
             comp_win += 1;
-        } else if p_move_i == c_move_i {
+        } else if p_move_int == c_move_int {
             println!("~DRAW~");
         } else {
             println!("~Player Wins!~");
@@ -68,30 +69,4 @@ fn main() {
     println!("Player = {}", player_win);
     println!("Comp = {}", comp_win);
     println!("\n{}", if player_win > comp_win { "***Player wins the game!***" } else { "***Comp wins the game!***" });
-}
-
-/// Get comp move
-///
-/// Return a random variant of the Moves enum
-fn get_comp_move() -> Moves {
-    match rand::thread_rng().gen_range(1..4) {
-        1 => Moves::Rock,
-        2 => Moves::Paper,
-        3 => Moves::Scissors,
-        _ => { panic!("RNG threading Error") }
-    }
-}
-
-#[derive(Debug)]
-enum Moves {
-    Rock,
-    Paper,
-    Scissors,
-}
-
-//Needed to print enum
-impl Display for Moves {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        write!(f, "{:?}", self)
-    }
 }

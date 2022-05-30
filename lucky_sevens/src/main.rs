@@ -4,11 +4,13 @@ use std::io;
 use std::io::Write;
 
 fn main() {
-    let lucky: i32 = 7;
-    let win: i32 = 4;
-    let loss: i32 = 1;
+    const LUCKY: i32 = 7;
+    // let win: i32 = 10;
+    // let loss: i32 = 3;
 
     let mut pot: String = String::new();
+    let mut bet: String = String::new();
+
     let mut roll_ct: i32 = 1;
     let mut lucky_ct: i32 = 0;
     let mut peak_roll: i32 = 0;
@@ -25,13 +27,24 @@ fn main() {
         Err(_) => 0,
     };
 
+    //get bet
+    print!("Enter bet [wins are tripled]: $");
+    io::stdout().flush(); //only way to get the stdout and stdin on same line
+    io::stdin()
+        .read_line(&mut bet)
+        .expect("Failed to read line");
+    let bet: i32 = match bet.trim().parse() {
+        Ok(num) => num,
+        Err(_) => 0,
+    };
+
     //play sim
+    let win: i32 = &bet * 3;
+    let loss: i32 = bet;
     println!("---Rolling---");
     while pot > 0 {
         let round: i32 = roll();
-        println!("Roll {} | {}", roll_ct, round);
-
-        match lucky.cmp(&round) {
+        match LUCKY.cmp(&round) {
             Ordering::Equal => {
                 println!("~~~Win~~~");
                 lucky_ct += 1;
@@ -41,6 +54,8 @@ fn main() {
             Ordering::Less => pot -= loss,
         }
 
+        println!("Roll {roll_ct} | {round} | ${pot}");
+
         if pot > peak_pot {
             peak_pot = pot;
             peak_roll = roll_ct;
@@ -49,9 +64,9 @@ fn main() {
         roll_ct += 1;
     }
 
-    println!("You went broke after {} rolls...", roll_ct);
-    println!("You got lucky {} times tonight...", lucky_ct);
-    println!("Highest earning: Round {} -> ${}", peak_roll, peak_pot);
+    println!("You went broke after {roll_ct} rolls...");
+    println!("You got lucky {lucky_ct} times tonight...");
+    println!("Highest earning: Round {peak_roll} -> ${peak_pot}");
 }
 
 /// Rolls 2 6-sided dice

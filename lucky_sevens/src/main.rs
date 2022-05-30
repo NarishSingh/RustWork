@@ -1,20 +1,22 @@
 use rand::Rng;
+use rust_decimal::Decimal;
+use rust_decimal_macros::dec;
 use std::cmp::Ordering;
 use std::io;
 use std::io::Write;
 
 fn main() {
     const LUCKY: i32 = 7;
-    // let win: i32 = 10;
-    // let loss: i32 = 3;
+    const BROKE: Decimal = dec!(0.00);
 
+    //input strings, get shadowed later
     let mut pot: String = String::new();
     let mut bet: String = String::new();
 
     let mut roll_ct: i32 = 1;
     let mut lucky_ct: i32 = 0;
     let mut peak_roll: i32 = 0;
-    let mut peak_pot: i32 = 0;
+    let mut peak_pot: Decimal = dec!(0.00);
 
     //get buy in amount
     print!("Enter buy in: $");
@@ -22,27 +24,32 @@ fn main() {
     io::stdin()
         .read_line(&mut pot)
         .expect("Failed to read line");
-    let mut pot: i32 = match pot.trim().parse() {
+    let mut pot: Decimal = match pot.trim().parse() {
         Ok(num) => num,
-        Err(_) => 0,
+        Err(_) => BROKE,
     };
 
     //get bet
-    print!("Enter bet [wins are tripled]: $");
+    print!("Enter bet [wins are tripled]: $"); // todo try this with decimals
     io::stdout().flush(); //only way to get the stdout and stdin on same line
     io::stdin()
         .read_line(&mut bet)
         .expect("Failed to read line");
-    let bet: i32 = match bet.trim().parse() {
+    let bet: Decimal = match bet.trim().parse() {
         Ok(num) => num,
-        Err(_) => 0,
+        Err(_) => BROKE,
     };
 
+    //exit game if can't play with amounts provided
+    if pot <= BROKE || bet <= BROKE {
+        println!("Unplayable amount")
+    }
+
     //play sim
-    let win: i32 = &bet * 3;
-    let loss: i32 = bet;
+    let win: Decimal = &bet * dec!(3.00);
+    let loss: Decimal = bet;
     println!("---Rolling---");
-    while pot > 0 {
+    while pot > BROKE {
         let round: i32 = roll();
         match LUCKY.cmp(&round) {
             Ordering::Equal => {

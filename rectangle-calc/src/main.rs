@@ -4,6 +4,23 @@ struct Rectangle {
     height: u32,
 }
 
+//this is a method on rectangle struct, not a function
+impl Rectangle {
+    /// Calculate the area
+    ///
+    /// Returns the area as u32
+    fn area(&self) -> u32 {
+        self.width * self.width
+    }
+
+    /// Verify if this Rectangle can hold another Rectangle
+    ///
+    /// Returns true if self is big enough to contain the other, false otherwise
+    fn can_hold(&self, other: &Rectangle) -> bool {
+        self.width > other.width && self.height > other.height
+    }
+}
+
 fn main() {
     //variables
     let width1: u32 = 30;
@@ -12,30 +29,50 @@ fn main() {
     println!("Area = {} px", area(width1, height1));
 
     //tuples -> but problem is what if we mix up the order
-    let rect1: (u32, u32) = (30, 50);
+    let rect_tup: (u32, u32) = (30, 50);
 
-    println!("Area = {} px", area_tuple(rect1));
+    println!("Area = {} px", area_tuple(rect_tup));
 
     //struct -> clear labeling of fields
-    let rect2: Rectangle = Rectangle {
+    let rect1: Rectangle = Rectangle {
         width: 30,
         height: 50,
     };
 
-    println!("Area = {} px", area_struct(&rect2)); //want main to retain this for future use -> hence use of ref
+    println!("Area = {} px", area_struct(&rect1)); //want main to retain this for future use -> hence use of ref
 
     //print rect info, after making it derive the Debug trait
-    println!("Rectangle struct: {:?}", rect2); //indicates to use the Debug print format
-    println!("Rectangle struct: {:#?}", rect2); //prettified Debug print format -> useful for larger structs
+    println!("Rectangle struct: {rect1:?}"); //indicates to use the Debug print format
+    println!("Rectangle struct: {rect1:#?}"); //prettified Debug print format -> useful for larger structs
 
     //use of the dbg macro
     let scale: u32 = 2;
-    let rect_d: Rectangle = Rectangle{
+    let rect_d: Rectangle = Rectangle {
         width: dbg!(30 * scale), //the macro will print and evaluate the expression within it
-        height: 50
+        height: 50,
     };
 
     dbg!(rect_d);
+
+    //Methods
+    println!("Area of rect: {} sq. px.", rect1.area());
+
+    let rect2: Rectangle = Rectangle {
+        width: 30,
+        height: 50,
+    };
+    let rect3: Rectangle = Rectangle {
+        width: 10,
+        height: 40,
+    };
+    let rect4: Rectangle = Rectangle {
+        width: 60,
+        height: 45,
+    };
+
+    println!("Can rect1 hold rect2?: {}", rect1.can_hold(&rect2));
+    println!("Can rect1 hold rect3?: {}", rect1.can_hold(&rect3));
+    println!("Can rect1 hold rect4?: {}", rect1.can_hold(&rect4));
 }
 
 /// Calculate the area of a rectangle

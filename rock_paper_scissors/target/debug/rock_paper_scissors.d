@@ -1,0 +1,1 @@
+C:\Users\naris\Documents\Work\TECHHIRE\REPOSITORY\RustWork\rock_paper_scissors\target\debug\rock_paper_scissors.exe: C:\Users\naris\Documents\Work\TECHHIRE\REPOSITORY\RustWork\rock_paper_scissors\src\main.rs

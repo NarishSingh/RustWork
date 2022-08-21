@@ -1,7 +1,6 @@
-mod Moves;
-
-use std::io;
-use crate::Moves::Moves::Moves;
+pub use std::io;
+mod GameMoves;
+use crate::GameMoves::game_moves::{get_comp_move, Moves};
 
 fn main() {
     let mut playing: bool = true;
@@ -33,10 +32,10 @@ fn main() {
                 continue;
             }
         };
-        println!("You chose {}", player_move);
+        println!("You chose {player_move}");
 
         comp_move = get_comp_move();
-        println!("Comp chose {}", comp_move);
+        println!("Comp chose {comp_move}");
 
         //round outcome
         //enums are 0 based, can cast to i32 for comparison
@@ -66,7 +65,7 @@ fn main() {
     }
 
     println!("\n-End Game-");
-    println!("Player = {}", player_win);
-    println!("Comp = {}", comp_win);
+    println!("Player = {player_win}");
+    println!("Comp = {comp_win}");
     println!("\n{}", if player_win > comp_win { "***Player wins the game!***" } else { "***Comp wins the game!***" });
 }

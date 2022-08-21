@@ -1,4 +1,4 @@
-pub mod Moves {
+pub mod GameMoves {
     use std::fmt::{Display, Formatter};
     use rand::Rng;
 

@@ -5,13 +5,12 @@ use crate::GameMoves::game_moves::{get_comp_move, Moves};
 fn main() {
     let mut playing: bool = true;
     let mut round_ct: i32 = 1;
-    let mut comp_move: Moves;
     let mut player_win: i32 = 0;
     let mut comp_win: i32 = 0;
 
     println!("---RPS---");
     while playing {
-        println!("-Round {}-", round_ct);
+        println!("-Round {round_ct}-");
 
         //moves
         let mut player_move: String = String::new(); //will shadow later
@@ -34,7 +33,7 @@ fn main() {
         };
         println!("You chose {player_move}");
 
-        comp_move = get_comp_move();
+        let comp_move: Moves = get_comp_move();
         println!("Comp chose {comp_move}");
 
         //round outcome
@@ -63,7 +62,7 @@ fn main() {
             round_ct += 1;
         }
     }
-
+    
     println!("\n-End Game-");
     println!("Player = {player_win}");
     println!("Comp = {comp_win}");

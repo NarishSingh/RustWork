@@ -15,9 +15,22 @@ impl Rectangle {
 
     /// Verify if this Rectangle can hold another Rectangle
     ///
+    /// other {Rectangle} the rectangle to verify against
     /// Returns true if self is big enough to contain the other, false otherwise
     fn can_hold(&self, other: &Rectangle) -> bool {
         self.width > other.width && self.height > other.height
+    }
+
+    /// Create a square
+    /// This is an *associated function* note that is has no `&self` as its first param
+    ///
+    /// size {u32} length of a side of the new rectangle
+    /// Returns a Rectangle obj that is a square
+    fn square(size: u32) -> Rectangle {
+        Rectangle {
+            width: size,
+            height: size,
+        }
     }
 }
 
@@ -73,6 +86,13 @@ fn main() {
     println!("Can rect1 hold rect2?: {}", rect1.can_hold(&rect2));
     println!("Can rect1 hold rect3?: {}", rect1.can_hold(&rect3));
     println!("Can rect1 hold rect4?: {}", rect1.can_hold(&rect4));
+
+    //associated functions
+    let sq1: Rectangle = Rectangle::square(3);
+    println!(
+        "sq1 is a square of {} width and {} height.",
+        sq1.width, sq1.height
+    )
 }
 
 /// Calculate the area of a rectangle
